@@ -2,10 +2,6 @@
 Radical RPC
 ===========
 
-    █▀▄ █▀█ █▀▄ ▀█▀ █▀▀ █▀█ █     █▀▄ █▀█ █▀▀
-    █▀▄ █▀█ █ █  █  █   █▀█ █     █▀▄ █▀▀ █
-    ▀ ▀ ▀ ▀ ▀▀  ▀▀▀ ▀▀▀ ▀ ▀ ▀▀▀   ▀ ▀ ▀   ▀▀▀
-
 .. contents:: Contents
 
 Decription
@@ -53,6 +49,8 @@ Using with Django
 
 1. Add Radical to INSTALLED_APPS:
 
+.. code-block:: python
+
     INSTALLED_APPS = [
         # ...
         'radical',
@@ -60,6 +58,8 @@ Using with Django
     ]
 
 2. Configure Radical:
+
+.. code-block:: python
 
     RADICAL_CONFIG = {
         'TRANSPORT_URL': 'redis://redis:6379/0?request_timeout=10',
@@ -70,6 +70,8 @@ Using with Django
     }
 
 3. Call it anywhere:
+
+.. code-block:: python
 
     from radical.contrib.django import call_wait, call
     from django.http import JsonResponse
@@ -85,5 +87,7 @@ Using with Django
         return JsonResponse(dict(result='Job was scheduled.'))
 
 4. Start Radical worker:
+
+.. code-block:: bash
 
     ./manage.py radical
