@@ -24,6 +24,7 @@ class Peer(object):
         if loop is None:  # pragma: no cover
             loop = asyncio.get_event_loop()
         self.loop = loop
+        self.transport_url = transport_url
         self.transport = self._create_transport(transport, transport_url, queue_name)
         self.serializer = self._create_serializer(serializer)
         self.queue_name = queue_name

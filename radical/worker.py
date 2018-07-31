@@ -57,6 +57,23 @@ class Worker(Peer):
         self.methods[cannonical_name] = method
 
     async def start(self) -> Awaitable:
+        urlinfo = urlparse(self.transport_url)
+        sys.stderr.write(FLAIR % (
+            f'Version   : {VERSION}',
+            f'URL       : {urlinfo.scheme}://***@{urlinfo.hostname}',
+            f'Queue     : {self.queue_name}',
+            f'Transport : {self.transport.__class__.__name__}',
+            f'Serializer: {self.serializer.__class__.__name__}',
+        ))
+        sys.stderr.write(f'\n')
+        if len(self.methods):
+            sys.stderr.write('Offering the following methods:\n\n')
+            for method in self.methods.keys():
+                sys.stderr.write(f'  - {method}\n')
+        else:
+            sys.stderr.write(f'  ! No methods found.\n')
+        sys.stderr.write('\n')
+
         await self.transport.start()
         self._main = asyncio.ensure_future(self._run())
         return self._main
@@ -175,22 +192,6 @@ def main():  # pragma: no cover
     logging.basicConfig(level=level, format='%(asctime)s [%(levelname)-8s] (%(module)s) %(message)s')
     worker = Worker(**args)
     methods = worker.discover(modules)
-    urlinfo = urlparse(args['transport_url'])
-    sys.stderr.write(FLAIR % (
-        f'Version   : {VERSION}',
-        f'URL       : {urlinfo.scheme}://***@{urlinfo.hostname}',
-        f'Queue     : {args["queue_name"]}',
-        f'Transport : {args["transport"].partition(":")[2]}',
-        f'Serializer: {args["serializer"].partition(":")[2]}',
-    ))
-    sys.stderr.write(f'\n')
-    if len(methods):
-        sys.stderr.write('Offering the following methods:\n\n')
-        for method in methods:
-            sys.stderr.write(f'  - {method}\n')
-    else:
-        sys.stderr.write(f'  ! No methods found.\n')
-    sys.stderr.write('\n')
     worker.run_until_complete()
 
 
