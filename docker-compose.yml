@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  radical:
+    image: radical
+    build:
+      context: ./
+    working_dir: /usr/src/app
+    command: >
+      bash -c "
+        pytest radical
+      "
+    links:
+      - redis
+
+  redis:
+    image: redis:4.0.5-alpine
