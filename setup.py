@@ -9,6 +9,7 @@ setup(
     name='radical-rpc',
     version=VERSION,
     description='Multi-transport RPC with asyncio & Django support.',
+    long_description=open('README.rst', 'r').read(),
     author="Andrew Dunai",
     author_email='andrew@dun.ai',
     url='https://github.com/and3rson/radical',

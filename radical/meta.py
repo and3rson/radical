@@ -1,4 +1,4 @@
-VERSION = '0.1.4'
+VERSION = '0.1.5'
 _RED = '\x1b[1;31m'
 _YELLOW = '\x1b[1;33m'
 _R = '\x1b[0m'
