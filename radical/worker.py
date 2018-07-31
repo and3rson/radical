@@ -18,6 +18,10 @@ from radical.serialization.base import (
 from radical.log import logger
 from radical.meta import VERSION, FLAIR
 
+_RED = '\x1b[1;31m'
+_YELLOW = '\x1b[1;33m'
+_R = '\x1b[0m'
+
 
 class Worker(Peer):
     def __init__(
@@ -69,9 +73,9 @@ class Worker(Peer):
         if len(self.methods):
             sys.stderr.write('Offering the following methods:\n\n')
             for method in self.methods.keys():
-                sys.stderr.write(f'  - {method}\n')
+                sys.stderr.write(f'{_YELLOW}  - {method}\n{_R}')
         else:
-            sys.stderr.write(f'  ! No methods found.\n')
+            sys.stderr.write(f'{_RED}  ! No methods found.\n{_R}')
         sys.stderr.write('\n')
 
         await self.transport.start()
@@ -81,12 +85,10 @@ class Worker(Peer):
     async def _run(self) -> NoReturn:
         logger.info('Radical RPC server is ready.')
         self.terminated = False
-        # asyncio.get_event_loop().create_task(self._accept())
         self.futures.append(asyncio.ensure_future(self._accept(), loop=self.loop))
         while len(self.futures):
             done, running = await asyncio.wait(
                 self.futures,
-                # [self._accept()] + self.request_futures,
                 return_when=asyncio.FIRST_COMPLETED,
                 loop=self.loop
             )
@@ -118,7 +120,6 @@ class Worker(Peer):
             else:
                 return radical_request
         return NoRequest()
-            # asyncio.ensure_future(self._process_request(request))
 
     async def _process_request(self, radical_request: RadicalRequest) -> Optional[RadicalResponse]:
         logger.info(f'Received request {radical_request}')
@@ -167,8 +168,6 @@ class Worker(Peer):
             logger.exception(str(error))
             asyncio.ensure_future(self.stop(), loop=self.loop)
             self.loop.stop()
-        # pending = asyncio.Task.all_tasks(loop=self.loop)
-        # self.loop.run_until_complete(asyncio.gather(*pending, loop=self.loop))
 
     async def stop(self):
         logger.info('Attempting graceful shutdown.')
