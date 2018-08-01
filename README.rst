@@ -1,6 +1,4 @@
-===========
-Radical RPC
-===========
+.. image:: https://raw.githubusercontent.com/and3rson/radical-rpc/master/images/logo.png
 
 .. contents:: Contents
 
@@ -51,6 +49,8 @@ Quick start
 
 Installing
 ~~~~~~~~~~
+
+.. code-block:: sh
 
     pip install radical-rpc
 
