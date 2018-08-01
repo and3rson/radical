@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/and3rson/radical-rpc/master/images/logo.png
+.. image:: https://raw.githubusercontent.com/and3rson/radical/master/images/logo.png
 
 .. contents:: Contents
 
