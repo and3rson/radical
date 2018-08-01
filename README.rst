@@ -18,9 +18,19 @@ Radical has out-of-the-box integration with Django and also supports asyncio, bu
 
 Radical is easily extensible with custom transports and serializers.
 
+Available transports:
+
+* Redis
+* Postgres
+
 Default and recommended transport is Redis.
 
-Default and recommended serializer is Pickle. JSON serializer is also included.
+Available serializers:
+
+* JSON
+* Pickle
+
+Default and recommended serializer is Pickle.
 
 Glossary
 ~~~~~~~~
@@ -49,45 +59,45 @@ Using with Django
 
 1. Add Radical to INSTALLED_APPS:
 
-.. code-block:: python
+    .. code-block:: python
 
-    INSTALLED_APPS = [
-        # ...
-        'radical',
-        # ...
-    ]
+        INSTALLED_APPS = [
+            # ...
+            'radical',
+            # ...
+        ]
 
 2. Configure Radical:
 
-.. code-block:: python
+    .. code-block:: python
 
-    RADICAL_CONFIG = {
-        'TRANSPORT_URL': 'redis://redis:6379/0?request_timeout=10',
-        'QUEUE_NAME': 'myapp',
-        'MODULES': [
-            'radical.demo'
-        ]
-    }
+        RADICAL_CONFIG = {
+            'TRANSPORT_URL': 'redis://redis:6379/0?request_timeout=10',
+            'QUEUE_NAME': 'myapp',
+            'MODULES': [
+                'radical.demo'
+            ]
+        }
 
 3. Call it anywhere:
 
-.. code-block:: python
+    .. code-block:: python
 
-    from radical.contrib.django import call_wait, call
-    from django.http import JsonResponse
+        from radical.contrib.django import call_wait, call
+        from django.http import JsonResponse
 
-    def some_view(request):
-        # Call remote method and wait for it to return result.
-        result = call_wait('myapp', 'radical.demo.add', 1300, 37)
-        return JsonResponse(dict(result=result))  # Returns {'result': 1337}
+        def some_view(request):
+            # Call remote method and wait for it to return result.
+            result = call_wait('myapp', 'radical.demo.add', 1300, 37)
+            return JsonResponse(dict(result=result))  # Returns {'result': 1337}
 
-    def some_view(request):
-        # Call remote method and do not wait for it to finish.
-        call('myapp', 'radical.demo.add', 1300, 37)
-        return JsonResponse(dict(result='Job was scheduled.'))
+        def some_view(request):
+            # Call remote method and do not wait for it to finish.
+            call('myapp', 'radical.demo.add', 1300, 37)
+            return JsonResponse(dict(result='Job was scheduled.'))
 
 4. Start Radical worker:
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    ./manage.py radical
+        ./manage.py radical

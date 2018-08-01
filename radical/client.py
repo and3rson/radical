@@ -1,3 +1,4 @@
+import asyncio
 import uuid
 
 from radical.peer import Peer
@@ -32,7 +33,8 @@ class Client(Peer):
     async def call_wait(self, queue_name, method, *args, **kwargs):
         logger.debug('Calling %s from %s (wait mode)', method, queue_name)
         message_id = uuid.uuid1().hex
-        response_future = await self.transport.get_response(message_id)
+        response_coroutine = await self.transport.get_response(message_id)
+        response_future = asyncio.ensure_future(response_coroutine, loop=self.loop)
         radical_request = RadicalRequest(signature=Signature(
             method=method,
             args=args,

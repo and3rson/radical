@@ -2,7 +2,7 @@ FROM alpine:3.7
 
 ENV PYTHONUNBUFFERED 1
 
-RUN apk add --no-cache busybox bash make python3 python3-dev py3-pip gcc musl-dev && \
+RUN apk add --no-cache busybox bash make python3 python3-dev py3-pip gcc musl-dev postgresql-dev && \
     rm -rf /var/cache/apk/*
 
 WORKDIR /usr/src/app

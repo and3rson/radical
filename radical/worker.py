@@ -16,11 +16,7 @@ from radical.serialization.base import (
     ProtocolError, BaseSerializer
 )
 from radical.log import logger
-from radical.meta import VERSION, FLAIR
-
-_RED = '\x1b[1;31m'
-_YELLOW = '\x1b[1;33m'
-_R = '\x1b[0m'
+from radical import meta
 
 
 class Worker(Peer):
@@ -62,20 +58,20 @@ class Worker(Peer):
 
     async def start(self) -> Awaitable:
         urlinfo = urlparse(self.transport_url)
-        sys.stderr.write(FLAIR % (
-            f'Version   : {VERSION}',
-            f'URL       : {urlinfo.scheme}://***@{urlinfo.hostname}',
-            f'Queue     : {self.queue_name}',
-            f'Transport : {self.transport.__class__.__name__}',
-            f'Serializer: {self.serializer.__class__.__name__}',
+        sys.stderr.write(meta.FLAIR % (
+            f'Version   : {meta.VERSION_COLOR}{meta.VERSION}{meta.R}',
+            f'URL       : {meta.PROP_COLOR}{urlinfo.scheme}://***@{urlinfo.hostname}{meta.R}',
+            f'Queue     : {meta.PROP_COLOR}{self.queue_name}{meta.R}',
+            f'Transport : {meta.PROP_COLOR}{self.transport.__class__.__name__}{meta.R}',
+            f'Serializer: {meta.PROP_COLOR}{self.serializer.__class__.__name__}{meta.R}',
         ))
         sys.stderr.write(f'\n')
         if len(self.methods):
             sys.stderr.write('Offering the following methods:\n\n')
             for method in self.methods.keys():
-                sys.stderr.write(f'{_YELLOW}  - {method}\n{_R}')
+                sys.stderr.write(f'{meta.SVC_COLOR}  - {method}\n{meta.R}')
         else:
-            sys.stderr.write(f'{_RED}  ! No methods found.\n{_R}')
+            sys.stderr.write(f'{meta.ERROR_COLOR}  ! No methods found.\n{meta.R}')
         sys.stderr.write('\n')
 
         await self.transport.start()
